@@ -5,31 +5,35 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#b4d335",
-        tabBarInactiveTintColor: "#9ca3af",
+        headerShown: false,
+        tabBarActiveTintColor: "#c6f25a",
+        tabBarInactiveTintColor: "#737a8a",
+        tabBarShowLabel: true,
         tabBarStyle: {
-          backgroundColor: "#252530",
-          borderTopColor: "#333340",
-          borderTopWidth: 1,
-          height: 80,
+          position: "absolute",
+          left: 16,
+          right: 16,
+          bottom: 16,
+          height: 68,
           paddingBottom: 8,
-          paddingTop: 12,
+          paddingTop: 8,
+          borderRadius: 26,
+          backgroundColor: "#181a20",
+          borderTopWidth: 0,
+          borderWidth: 1,
+          borderColor: "#262a33",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 12 },
+          shadowOpacity: 0.45,
+          shadowRadius: 24,
+          elevation: 12,
         },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: "500",
-        },
-        headerStyle: {
-          backgroundColor: "#1e1e24",
-        },
-        headerTintColor: "#b4d335",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: "600" },
       }}
+
     >
       <Tabs.Screen
-        name="index"
+        name="recipes"
         options={{
           title: "Receitas",
           headerTitle: "RecipeNow",

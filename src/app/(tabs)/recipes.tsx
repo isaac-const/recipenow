@@ -13,6 +13,7 @@ import {
 } from "react-native"
 import { useRouter } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
+import { LinearGradient } from "expo-linear-gradient"
 import { fetchRecipes, searchRecipes } from "../../services/api"
 import type { Recipe } from "../../types"
 
@@ -148,32 +149,27 @@ export default function RecipesScreen() {
   }, [])
 
   const renderRecipeItem = ({ item }: { item: Recipe }) => (
-    <TouchableOpacity style={styles.recipeCard} onPress={() => router.push(`/recipes/${item.id}`)}>
+    <TouchableOpacity style={styles.recipeCard} activeOpacity={0.9} onPress={() => router.push(`/recipes/${item.id}`)}>
       <Image
         source={{ uri: item.image || "https://via.placeholder.com/300x200?text=Sem+Imagem" }}
         style={styles.recipeImage}
         resizeMode="cover"
       />
+      <LinearGradient colors={["rgba(10,11,14,0)", "rgba(10,11,14,0.55)", "rgba(10,11,14,0.94)"]} style={styles.cardShade} />
+      <View style={styles.cuisineTag}>
+        <Text style={styles.cuisineTagText}>{FLAGS[item.cuisine] || "🍽️"} {item.cuisine}</Text>
+      </View>
       <View style={styles.recipeContent}>
         <Text style={styles.recipeTitle} numberOfLines={2}>
           {item.name}
         </Text>
-        <Text style={styles.recipeIngredients} numberOfLines={2}>
-          {item.ingredients.slice(0, 3).join(", ")}
-          {item.ingredients.length > 3 ? "..." : ""}
-        </Text>
         <View style={styles.recipeMetaContainer}>
           <View style={styles.recipeMeta}>
-            <Ionicons name="flag-outline" size={14} color="#b4d335" />
-            <Text style={styles.recipeMetaText}>{item.difficulty || "Easy"}</Text>
+            <Ionicons name="time-outline" size={14} color="#c6f25a" />
+            <Text style={styles.recipeMetaText}>{item.cookTimeMinutes} min</Text>
           </View>
-          <View style={styles.recipeMeta}>
-            <Ionicons name="time-outline" size={14} color="#b4d335" />
-            <Text style={styles.recipeMetaText}>{item.cookTimeMinutes}min</Text>
-          </View>
-        </View>
-        <View style={styles.cuisineTag}>
-          <Text style={styles.cuisineTagText}>{item.cuisine}</Text>
+          <View style={styles.dot} />
+          <Text style={styles.recipeMetaText}>{item.difficulty || "Easy"}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -184,6 +180,7 @@ export default function RecipesScreen() {
       style={[styles.categoryButton, selectedCategory === item && styles.selectedCategoryButton]}
       onPress={() => filterByCategory(item)}
     >
+      <Text style={styles.categoryEmoji}>{FLAGS[item] || "🍽️"}</Text>
       <Text style={[styles.categoryButtonText, selectedCategory === item && styles.selectedCategoryButtonText]}>
         {item}
       </Text>
@@ -194,7 +191,7 @@ export default function RecipesScreen() {
     if (!loadingMore) return null
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#b4d335" />
+        <ActivityIndicator size="small" color="#c6f25a" />
         <Text style={styles.footerLoaderText}>Carregando mais receitas...</Text>
       </View>
     )
@@ -203,7 +200,7 @@ export default function RecipesScreen() {
   if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#b4d335" />
+        <ActivityIndicator size="large" color="#c6f25a" />
         <Text style={styles.loadingText}>Carregando receitas...</Text>
       </View>
     )
@@ -212,7 +209,7 @@ export default function RecipesScreen() {
   if (error) {
     return (
       <View style={styles.errorContainer}>
-        <Ionicons name="alert-circle-outline" size={48} color="#b4d335" />
+        <Ionicons name="alert-circle-outline" size={48} color="#c6f25a" />
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={loadInitialData}>
           <Text style={styles.retryButtonText}>Tentar Novamente</Text>
@@ -221,44 +218,46 @@ export default function RecipesScreen() {
     )
   }
 
+  const header = (
+    <View style={styles.header}>
+      <Text style={styles.eyebrow}>RecipeNow</Text>
+      <Text style={styles.heading}>O que vamos{"\n"}cozinhar hoje?</Text>
+      <View style={styles.searchInputContainer}>
+        <Ionicons name="search" size={20} color="#737a8a" style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Buscar receitas"
+          placeholderTextColor="#737a8a"
+          value={searchInput}
+          onChangeText={setSearchInput}
+          onSubmitEditing={handleSearch}
+          returnKeyType="search"
+        />
+        {searchInput.length > 0 && (
+          <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
+            <Ionicons name="close-circle" size={20} color="#737a8a" />
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity onPress={handleSearch} style={styles.searchButton} disabled={searching}>
+          {searching ? <ActivityIndicator size="small" color="#10130a" /> : <Ionicons name="arrow-forward" size={20} color="#10130a" />}
+        </TouchableOpacity>
+      </View>
+      {!searchQuery && (
+        <FlatList
+          data={categories}
+          renderItem={renderCategoryItem}
+          keyExtractor={(item) => item}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoriesList}
+          contentContainerStyle={{ gap: 8, paddingRight: 8 }}
+        />
+      )}
+    </View>
+  )
+
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <View style={styles.searchInputContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Buscar Receitas..."
-            placeholderTextColor="#6b7280"
-            value={searchInput}
-            onChangeText={setSearchInput}
-            onSubmitEditing={handleSearch}
-            returnKeyType="search"
-          />
-          {searchInput.length > 0 && (
-            <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
-              <Ionicons name="close-circle" size={20} color="#6b7280" />
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity onPress={handleSearch} style={styles.searchButton} disabled={searching}>
-            {searching ? (
-              <ActivityIndicator size="small" color="#1e1e24" />
-            ) : (
-              <Ionicons name="search" size={20} color="#1e1e24" />
-            )}
-          </TouchableOpacity>
-        </View>
-        {!searchQuery && (
-          <FlatList
-            data={categories}
-            renderItem={renderCategoryItem}
-            keyExtractor={(item) => item}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={styles.categoriesList}
-          />
-        )}
-      </View>
-
       <FlatList
         data={displayedRecipes}
         renderItem={renderRecipeItem}
@@ -266,13 +265,14 @@ export default function RecipesScreen() {
         contentContainerStyle={styles.recipesList}
         numColumns={2}
         columnWrapperStyle={styles.row}
+        ListHeaderComponent={header}
         onEndReached={loadMoreRecipes}
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#b4d335" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#c6f25a" />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="search-outline" size={48} color="#6b7280" />
+            <Ionicons name="search-outline" size={48} color="#737a8a" />
             <Text style={styles.emptyText}>
               {searchQuery ? `Nenhuma receita encontrada para "${searchQuery}"` : "Nenhuma receita disponível"}
             </Text>
@@ -283,206 +283,54 @@ export default function RecipesScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1e1e24",
-  },
-  searchContainer: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#333340",
-  },
-  searchInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#252530",
-    borderRadius: 8,
+const FLAGS: Record<string, string> = {
+  Italian: "🍝", Asian: "🥢", American: "🍔", Mexican: "🌮", Mediterranean: "🫒", Pakistani: "🍛", Japanese: "🍣",
+  Moroccan: "🍲", Greek: "🥙", Indian: "🍛", Thai: "🍜", French: "🥐", Turkish: "🥙", Lebanese: "🧆", Brazilian: "🍖",
+}
 
-    marginBottom: 12,
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#0f1013" },
+  header: { paddingTop: 56, paddingHorizontal: 4, paddingBottom: 18 },
+  eyebrow: { color: "#c6f25a", fontSize: 13, fontWeight: "700", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 },
+  heading: { color: "white", fontSize: 32, fontWeight: "800", lineHeight: 36, letterSpacing: -0.8, marginBottom: 20 },
+  searchInputContainer: {
+    flexDirection: "row", alignItems: "center", backgroundColor: "#181a20", borderRadius: 20, borderWidth: 1, borderColor: "#262a33",
+    paddingLeft: 14, paddingRight: 6, paddingVertical: 6, marginBottom: 16,
   },
-  searchInput: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    color: "white",
-    fontSize: 16,
-  },
-  clearButton: {
-    padding: 4,
-    marginRight: 8,
-  },
-  searchButton: {
-    backgroundColor: "#b4d335",
-    borderRadius: 6,
-    padding: 8,
-    minWidth: 36,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  searchStatus: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#333340",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 6,
-    marginBottom: 12,
-  },
-  searchStatusText: {
-    color: "white",
-    fontSize: 14,
-  },
-  clearSearchText: {
-    color: "#b4d335",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  categoriesList: {
-    marginTop: 4,
-  },
+  searchIcon: { marginRight: 8 },
+  searchInput: { flex: 1, paddingVertical: 10, color: "white", fontSize: 16, outlineStyle: "none" as any },
+  clearButton: { padding: 4, marginRight: 6 },
+  searchButton: { backgroundColor: "#c6f25a", borderRadius: 14, width: 42, height: 42, alignItems: "center", justifyContent: "center" },
+  categoriesList: { flexGrow: 0 },
   categoryButton: {
-    marginRight: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    backgroundColor: "#252530",
-    borderWidth: 1,
-    borderColor: "#333340",
+    flexDirection: "row", alignItems: "center", gap: 6, paddingVertical: 9, paddingHorizontal: 14, borderRadius: 999,
+    backgroundColor: "#181a20", borderWidth: 1, borderColor: "#262a33",
   },
-  selectedCategoryButton: {
-    backgroundColor: "#b4d335",
-    borderColor: "#b4d335",
-  },
-  categoryButtonText: {
-    color: "white",
-    fontWeight: "500",
-    fontSize: 14,
-  },
-  selectedCategoryButtonText: {
-    color: "#1e1e24",
-  },
-  recipesList: {
-    padding: 16,
-    paddingBottom: 100,
-  },
-  row: {
-    justifyContent: "space-between",
-  },
-  recipeCard: {
-    width: "48%",
-    marginBottom: 16,
-    backgroundColor: "#252530",
-    borderRadius: 12,
-    overflow: "hidden",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  recipeImage: {
-    width: "100%",
-    height: 120,
-  },
-  recipeContent: {
-    padding: 12,
-  },
-  recipeTitle: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 6,
-    lineHeight: 20,
-  },
-  recipeIngredients: {
-    color: "#9ca3af",
-    fontSize: 12,
-    marginBottom: 8,
-    lineHeight: 16,
-  },
-  recipeMetaContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 6,
-  },
-  recipeMeta: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  recipeMetaText: {
-    color: "#b4d335",
-    marginLeft: 4,
-    fontSize: 12,
-  },
-  cuisineTag: {
-    alignSelf: "flex-start",
-    backgroundColor: "#333340",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 10,
-  },
-  cuisineTagText: {
-    color: "#b4d335",
-    fontSize: 10,
-    fontWeight: "500",
-  },
-  loadingContainer: {
-    flex: 1,
-    backgroundColor: "#1e1e24",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    color: "white",
-    marginTop: 12,
-    fontSize: 16,
-  },
-  errorContainer: {
-    flex: 1,
-    backgroundColor: "#1e1e24",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-  },
-  errorText: {
-    color: "white",
-    textAlign: "center",
-    marginTop: 16,
-    fontSize: 16,
-  },
-  retryButton: {
-    marginTop: 16,
-    backgroundColor: "#b4d335",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: "#1e1e24",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  emptyContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 40,
-  },
-  emptyText: {
-    color: "white",
-    textAlign: "center",
-    marginTop: 16,
-    fontSize: 16,
-  },
-  footerLoader: {
-    paddingVertical: 20,
-    alignItems: "center",
-  },
-  footerLoaderText: {
-    color: "#9ca3af",
-    marginTop: 8,
-    fontSize: 14,
-  },
+  selectedCategoryButton: { backgroundColor: "#c6f25a", borderColor: "#c6f25a" },
+  categoryEmoji: { fontSize: 15 },
+  categoryButtonText: { color: "#d7dbe4", fontSize: 14, fontWeight: "600" },
+  selectedCategoryButtonText: { color: "#10130a" },
+  recipesList: { paddingHorizontal: 16, paddingBottom: 120 },
+  row: { justifyContent: "space-between", gap: 12 },
+  recipeCard: { flex: 1, height: 250, borderRadius: 24, overflow: "hidden", marginBottom: 12, backgroundColor: "#181a20" },
+  recipeImage: { ...StyleSheet.absoluteFillObject, width: "100%", height: "100%" },
+  cardShade: { position: "absolute", left: 0, right: 0, bottom: 0, height: "72%" },
+  cuisineTag: { position: "absolute", top: 12, left: 12, backgroundColor: "rgba(15,16,19,0.7)", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 999 },
+  cuisineTagText: { color: "white", fontSize: 11, fontWeight: "700" },
+  recipeContent: { position: "absolute", left: 14, right: 14, bottom: 14 },
+  recipeTitle: { color: "white", fontSize: 17, fontWeight: "800", lineHeight: 21, letterSpacing: -0.2, marginBottom: 8 },
+  recipeMetaContainer: { flexDirection: "row", alignItems: "center", gap: 8 },
+  recipeMeta: { flexDirection: "row", alignItems: "center", gap: 4 },
+  recipeMetaText: { color: "#d7dbe4", fontSize: 12, fontWeight: "600" },
+  dot: { width: 3, height: 3, borderRadius: 2, backgroundColor: "#737a8a" },
+  loadingContainer: { flex: 1, backgroundColor: "#0f1013", justifyContent: "center", alignItems: "center" },
+  loadingText: { color: "white", marginTop: 12, fontSize: 16 },
+  errorContainer: { flex: 1, backgroundColor: "#0f1013", justifyContent: "center", alignItems: "center", padding: 16 },
+  errorText: { color: "white", textAlign: "center", marginTop: 16, fontSize: 16 },
+  retryButton: { marginTop: 16, backgroundColor: "#c6f25a", paddingHorizontal: 24, paddingVertical: 12, borderRadius: 999 },
+  retryButtonText: { color: "#10130a", fontWeight: "700" },
+  footerLoader: { flexDirection: "row", justifyContent: "center", alignItems: "center", padding: 16, gap: 8 },
+  footerLoaderText: { color: "#a1a7b5" },
+  emptyContainer: { alignItems: "center", paddingVertical: 60, gap: 12 },
+  emptyText: { color: "#a1a7b5", textAlign: "center", fontSize: 16 },
 })

@@ -67,11 +67,11 @@ export default function FavoritesScreen() {
           </Text>
           <View style={styles.favoriteMetaContainer}>
             <View style={styles.favoriteMeta}>
-              <Ionicons name="flag-outline" size={14} color="#b4d335" />
+              <Ionicons name="flag-outline" size={14} color="#c6f25a" />
               <Text style={styles.favoriteMetaText}>{item.difficulty || "Easy"}</Text>
             </View>
             <View style={styles.favoriteMeta}>
-              <Ionicons name="time-outline" size={14} color="#b4d335" />
+              <Ionicons name="time-outline" size={14} color="#c6f25a" />
               <Text style={styles.favoriteMetaText}>{item.cookTimeMinutes}min</Text>
             </View>
           </View>
@@ -89,7 +89,7 @@ export default function FavoritesScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#b4d335" />
+        <ActivityIndicator size="large" color="#c6f25a" />
         <Text style={styles.loadingText}>Carregando favoritos...</Text>
       </View>
     )
@@ -99,10 +99,10 @@ export default function FavoritesScreen() {
     <View style={styles.container}>
       {favorites.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Ionicons name="heart-outline" size={64} color="#6b7280" />
+          <Ionicons name="heart-outline" size={64} color="#737a8a" />
           <Text style={styles.emptyTitle}>Nenhum favorito ainda</Text>
           <Text style={styles.emptyText}>Adicione receitas aos seus favoritos para vê-las aqui</Text>
-          <TouchableOpacity style={styles.exploreButton} onPress={() => router.push("/(tabs)")}>
+          <TouchableOpacity style={styles.exploreButton} onPress={() => router.push("/recipes")}>
             <Text style={styles.exploreButtonText}>Explorar Receitas</Text>
           </TouchableOpacity>
         </View>
@@ -112,7 +112,8 @@ export default function FavoritesScreen() {
           renderItem={renderFavoriteItem}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.favoritesList}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#b4d335" />}
+          ListHeaderComponent={<Text style={styles.pageTitle}>Favoritos</Text>}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#c6f25a" />}
         />
       )}
     </View>
@@ -122,11 +123,11 @@ export default function FavoritesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1e1e24",
+    backgroundColor: "#0f1013",
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: "#1e1e24",
+    backgroundColor: "#0f1013",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -149,30 +150,33 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   emptyText: {
-    color: "#9ca3af",
+    color: "#a1a7b5",
     textAlign: "center",
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 24,
   },
   exploreButton: {
-    backgroundColor: "#b4d335",
+    backgroundColor: "#c6f25a",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
   },
   exploreButtonText: {
-    color: "#1e1e24",
+    color: "#0f1013",
     fontWeight: "bold",
     fontSize: 16,
   },
   favoritesList: {
-    padding: 16,
+    paddingTop: 56,
+    paddingHorizontal: 16,
+    paddingBottom: 120,
   },
+  pageTitle: { color: "white", fontSize: 32, fontWeight: "800", letterSpacing: -0.8, marginBottom: 20 },
   favoriteCard: {
     marginBottom: 16,
-    backgroundColor: "#252530",
-    borderRadius: 12,
+    backgroundColor: "#181a20",
+    borderRadius: 22,
     overflow: "hidden",
     position: "relative",
     elevation: 3,
@@ -200,7 +204,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   favoriteIngredients: {
-    color: "#9ca3af",
+    color: "#a1a7b5",
     fontSize: 14,
     marginBottom: 8,
     lineHeight: 18,
@@ -215,19 +219,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   favoriteMetaText: {
-    color: "#b4d335",
+    color: "#c6f25a",
     fontSize: 12,
     marginLeft: 4,
   },
   cuisineTag: {
     alignSelf: "flex-start",
-    backgroundColor: "#333340",
+    backgroundColor: "#262a33",
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
   },
   cuisineTagText: {
-    color: "#b4d335",
+    color: "#c6f25a",
     fontSize: 10,
     fontWeight: "500",
   },

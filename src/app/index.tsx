@@ -2,20 +2,30 @@
 
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native"
 import { useRouter } from "expo-router"
+import { Ionicons } from "@expo/vector-icons"
+import { LinearGradient } from "expo-linear-gradient"
 
 export default function Home() {
   const router = useRouter()
 
   return (
     <View style={styles.container}>
+      <View style={styles.heroWrap}>
+        <Image source={{ uri: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1000" }} style={styles.image} />
+        <LinearGradient colors={["rgba(15,16,19,0.45)", "rgba(15,16,19,0)", "rgba(15,16,19,0.35)"]} style={styles.heroShade} />
+        <View style={styles.badge}>
+          <Ionicons name="restaurant" size={14} color="#10130a" />
+          <Text style={styles.badgeText}>RecipeNow</Text>
+        </View>
+      </View>
+
       <View style={styles.content}>
-        <Text style={styles.title}>RecipeNow</Text>
-        <Text style={styles.subtitle}>Descubra receitas deliciosas para qualquer ocasião</Text>
+        <Text style={styles.title}>Descubra receitas{"\n"}para qualquer ocasião</Text>
+        <Text style={styles.subtitle}>Busque por nome, filtre por culinária e guarde as favoritas.</Text>
 
-        <Image source={{ uri: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c" }} style={styles.image} />
-
-        <TouchableOpacity onPress={() => router.push("/recipes")} style={styles.button}>
+        <TouchableOpacity onPress={() => router.push("/recipes")} style={styles.button} activeOpacity={0.9}>
           <Text style={styles.buttonText}>Explorar Receitas</Text>
+          <Ionicons name="arrow-forward" size={20} color="#10130a" />
         </TouchableOpacity>
       </View>
     </View>
@@ -23,54 +33,21 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1e1e24",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
+  container: { flex: 1, backgroundColor: "#0f1013" },
+  heroWrap: { height: "52%", borderBottomLeftRadius: 40, borderBottomRightRadius: 40, overflow: "hidden" },
+  image: { width: "100%", height: "100%" },
+  heroShade: { ...StyleSheet.absoluteFillObject },
+  badge: {
+    position: "absolute", top: 56, left: 24, flexDirection: "row", alignItems: "center", gap: 6,
+    backgroundColor: "#c6f25a", paddingHorizontal: 12, paddingVertical: 7, borderRadius: 999,
   },
-  content: {
-    alignItems: "center",
-    marginBottom: 40,
-  },
-  title: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: "#b4d335",
-    marginBottom: 8,
-  },
-  subtitle: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 18,
-    marginBottom: 32,
-  },
-  image: {
-    width: 256,
-    height: 256,
-    borderRadius: 128,
-    marginBottom: 40,
-    shadowColor: "#b4d335",
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.44,
-    shadowRadius: 10.32,
-    elevation: 16,
-  },
+  badgeText: { color: "#10130a", fontWeight: "800", fontSize: 13, letterSpacing: 0.3 },
+  content: { flex: 1, paddingHorizontal: 24, paddingTop: 32, justifyContent: "space-between", paddingBottom: 40 },
+  title: { color: "white", fontSize: 34, fontWeight: "800", lineHeight: 38, letterSpacing: -1 },
+  subtitle: { color: "#a1a7b5", fontSize: 16, lineHeight: 23, marginTop: -8 },
   button: {
-    backgroundColor: "#b4d335",
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 50,
-    width: 256,
+    flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, backgroundColor: "#c6f25a",
+    paddingVertical: 18, borderRadius: 22,
   },
-  buttonText: {
-    color: "#1e1e24",
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 18,
-  },
+  buttonText: { color: "#10130a", fontWeight: "800", fontSize: 18 },
 })

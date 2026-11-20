@@ -15,7 +15,7 @@ export default function TabBar({ currentRoute }: TabBarProps) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.tabItem} onPress={() => router.push("/")}>
-        <Ionicons name={isActive("/") ? "home" : "home-outline"} size={24} color={isActive("/") ? "#b4d335" : "#fff"} />
+        <Ionicons name={isActive("/") ? "home" : "home-outline"} size={24} color={isActive("/") ? "#c6f25a" : "#fff"} />
         <Text style={isActive("/") ? styles.activeTabText : styles.tabText}>Início</Text>
       </TouchableOpacity>
 
@@ -23,7 +23,7 @@ export default function TabBar({ currentRoute }: TabBarProps) {
         <Ionicons
           name={isActive("/recipes") ? "restaurant" : "restaurant-outline"}
           size={24}
-          color={isActive("/recipes") ? "#b4d335" : "#fff"}
+          color={isActive("/recipes") ? "#c6f25a" : "#fff"}
         />
         <Text style={isActive("/recipes") ? styles.activeTabText : styles.tabText}>Receitas</Text>
       </TouchableOpacity>
@@ -32,7 +32,7 @@ export default function TabBar({ currentRoute }: TabBarProps) {
         <Ionicons
           name={isActive("/favorites") ? "heart" : "heart-outline"}
           size={24}
-          color={isActive("/favorites") ? "#b4d335" : "#fff"}
+          color={isActive("/favorites") ? "#c6f25a" : "#fff"}
         />
         <Text style={isActive("/favorites") ? styles.activeTabText : styles.tabText}>Favoritos</Text>
       </TouchableOpacity>
@@ -41,7 +41,7 @@ export default function TabBar({ currentRoute }: TabBarProps) {
         <Ionicons
           name={isActive("/about") ? "information-circle" : "information-circle-outline"}
           size={24}
-          color={isActive("/about") ? "#b4d335" : "#fff"}
+          color={isActive("/about") ? "#c6f25a" : "#fff"}
         />
         <Text style={isActive("/about") ? styles.activeTabText : styles.tabText}>Sobre</Text>
       </TouchableOpacity>
@@ -55,9 +55,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#252530",
+    backgroundColor: "#181a20",
     borderTopWidth: 1,
-    borderTopColor: "#333340",
+    borderTopColor: "#262a33",
     flexDirection: "row",
     justifyContent: "space-around",
     paddingVertical: 8,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   activeTabText: {
-    color: "#b4d335",
+    color: "#c6f25a",
     fontSize: 12,
   },
 })

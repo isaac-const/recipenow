@@ -31,22 +31,19 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: "#1e1e24",
+            backgroundColor: "#0f1013",
           },
-          headerTintColor: "#b4d335",
+          headerTintColor: "#c6f25a", headerShown: false,
           headerTitleStyle: {
             fontWeight: "bold",
           },
-          contentStyle: { backgroundColor: "#1e1e24" },
+          contentStyle: { backgroundColor: "#0f1013" },
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="recipes/[id]"
-          options={{
-            headerTitle: "Detalhes da Receita",
-            headerBackTitle: "Voltar",
-          }}
+          options={{ headerShown: false }}
         />
       </Stack>
     </View>

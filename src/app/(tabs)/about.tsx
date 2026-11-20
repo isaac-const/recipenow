@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons"
 export default function AboutScreen() {
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingTop: 40, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.title}>RecipeNow</Text>
           <Text style={styles.version}>Versão 1.0.0</Text>
@@ -26,15 +26,15 @@ export default function AboutScreen() {
           <Text style={styles.sectionTitle}>Funcionalidades</Text>
           <View style={styles.featuresList}>
             <View style={styles.featureItem}>
-              <Ionicons name="search" size={20} color="#b4d335" />
+              <Ionicons name="search" size={20} color="#c6f25a" />
               <Text style={styles.featureText}>Busca inteligente de receitas</Text>
             </View>
             <View style={styles.featureItem}>
-              <Ionicons name="heart" size={20} color="#b4d335" />
+              <Ionicons name="heart" size={20} color="#c6f25a" />
               <Text style={styles.featureText}>Sistema de favoritos</Text>
             </View>
             <View style={styles.featureItem}>
-              <Ionicons name="filter" size={20} color="#b4d335" />
+              <Ionicons name="filter" size={20} color="#c6f25a" />
               <Text style={styles.featureText}>Filtros por categoria</Text>
             </View>
           </View>
@@ -67,7 +67,7 @@ export default function AboutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1e1e24",
+    backgroundColor: "#0f1013",
   },
   scrollView: {
     flex: 1,
@@ -79,13 +79,13 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   title: {
-    color: "#b4d335",
+    color: "#c6f25a",
     fontSize: 32,
     fontWeight: "bold",
     marginBottom: 8,
   },
   version: {
-    color: "#9ca3af",
+    color: "#a1a7b5",
     fontSize: 16,
     marginBottom: 4,
   },
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   card: {
-    backgroundColor: "#252530",
+    backgroundColor: "#181a20",
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   tag: {
-    backgroundColor: "#333340",
+    backgroundColor: "#262a33",
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   tagText: {
-    color: "#b4d335",
+    color: "#c6f25a",
     fontSize: 14,
     fontWeight: "500",
   },
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   developerEmail: {
-    color: "#9ca3af",
+    color: "#a1a7b5",
     fontSize: 16,
     marginBottom: 20,
   },
@@ -165,12 +165,12 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   socialButton: {
-    backgroundColor: "#333340",
+    backgroundColor: "#262a33",
     borderRadius: 50,
     padding: 12,
   },
   description: {
-    color: "#d1d5db",
+    color: "#d7dbe4",
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 12,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   attributionText: {
-    color: "#d1d5db",
+    color: "#d7dbe4",
     fontSize: 14,
     marginLeft: 8,
     flex: 1,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   footerText: {
-    color: "#9ca3af",
+    color: "#a1a7b5",
     fontSize: 14,
   },
 })

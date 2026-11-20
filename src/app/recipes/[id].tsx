@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react"
 import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native"
-import { useLocalSearchParams } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
 import { fetchRecipeById } from "../../services/api"
 import { toggleFavorite, isFavorite } from "../../services/favorites"
@@ -9,6 +9,7 @@ import type { Recipe } from "../../types"
 
 export default function RecipeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
+  const router = useRouter()
   const [recipe, setRecipe] = useState<Recipe | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -47,7 +48,7 @@ export default function RecipeDetailScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#b4d335" />
+        <ActivityIndicator size="large" color="#c6f25a" />
         <Text style={styles.loadingText}>Carregando receita...</Text>
       </View>
     )
@@ -56,7 +57,7 @@ export default function RecipeDetailScreen() {
   if (error || !recipe) {
     return (
       <View style={styles.errorContainer}>
-        <Ionicons name="alert-circle-outline" size={48} color="#b4d335" />
+        <Ionicons name="alert-circle-outline" size={48} color="#c6f25a" />
         <Text style={styles.errorText}>{error || "Receita não encontrada"}</Text>
       </View>
     )
@@ -66,6 +67,9 @@ export default function RecipeDetailScreen() {
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.imageContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()} activeOpacity={0.85}>
+            <Ionicons name="arrow-back" size={22} color="#fff" />
+          </TouchableOpacity>
           <Image
             source={{ uri: recipe.image || "https://via.placeholder.com/400x300?text=Sem+Imagem" }}
             style={styles.recipeImage}
@@ -148,11 +152,11 @@ export default function RecipeDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1e1e24",
+    backgroundColor: "#0f1013",
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: "#1e1e24",
+    backgroundColor: "#0f1013",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     flex: 1,
-    backgroundColor: "#1e1e24",
+    backgroundColor: "#0f1013",
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
@@ -179,7 +183,13 @@ const styles = StyleSheet.create({
   },
   recipeImage: {
     width: "100%",
-    height: 280,
+    height: 340,
+    borderBottomLeftRadius: 36,
+    borderBottomRightRadius: 36,
+  },
+  backButton: {
+    position: "absolute", top: 52, left: 20, zIndex: 5, width: 44, height: 44, borderRadius: 22,
+    backgroundColor: "rgba(15,16,19,0.7)", alignItems: "center", justifyContent: "center",
   },
   favoriteButton: {
     position: "absolute",
@@ -187,7 +197,7 @@ const styles = StyleSheet.create({
     right: 16,
     backgroundColor: "white",
     borderRadius: 50,
-    padding: 12,
+    padding: 14,
     elevation: 4,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -199,16 +209,19 @@ const styles = StyleSheet.create({
   },
   recipeTitle: {
     color: "white",
-    fontSize: 28,
-    fontWeight: "bold",
+    fontSize: 30,
+    fontWeight: "800",
+    letterSpacing: -0.8,
     marginBottom: 16,
-    lineHeight: 34,
+    lineHeight: 35,
   },
   infoCard: {
-    backgroundColor: "#252530",
-    borderRadius: 12,
+    backgroundColor: "#181a20",
+    borderRadius: 22,
     padding: 20,
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: "#262a33",
   },
   sectionTitle: {
     color: "white",
@@ -226,12 +239,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   infoLabel: {
-    color: "#9ca3af",
+    color: "#a1a7b5",
     fontSize: 14,
     marginBottom: 4,
   },
   infoValue: {
-    color: "#b4d335",
+    color: "#c6f25a",
     fontWeight: "600",
     fontSize: 16,
   },
@@ -239,7 +252,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   card: {
-    backgroundColor: "#252530",
+    backgroundColor: "#181a20",
     borderRadius: 12,
     padding: 20,
   },
@@ -252,7 +265,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "#b4d335",
+    backgroundColor: "#c6f25a",
     marginRight: 12,
   },
   ingredientText: {
@@ -265,7 +278,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   instructionNumber: {
-    backgroundColor: "#b4d335",
+    backgroundColor: "#c6f25a",
     width: 28,
     height: 28,
     borderRadius: 14,
@@ -275,7 +288,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   instructionNumberText: {
-    color: "#1e1e24",
+    color: "#0f1013",
     fontWeight: "bold",
     fontSize: 14,
   },
@@ -290,7 +303,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   tagItem: {
-    backgroundColor: "#252530",
+    backgroundColor: "#181a20",
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -298,7 +311,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   tagText: {
-    color: "#b4d335",
+    color: "#c6f25a",
     fontSize: 14,
   },
 })
